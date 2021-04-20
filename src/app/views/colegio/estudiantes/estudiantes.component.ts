@@ -1,5 +1,6 @@
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Router } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ColegioService } from '../../../app_core/services/colegio-service/colegio.service';
 
@@ -14,20 +15,35 @@ import { ColegioService } from '../../../app_core/services/colegio-service/coleg
 export class Estudiantes implements OnInit {
 
   /**
+   * Varible que contiene los valores del formulario
+   */
+   formAddx: FormGroup
+  /**
    * Variable que contiene el formulario de las casas
    */
   formProfesor: FormGroup
   /**
    * Variable donde se alamacena los cursos de un profesor
    */
+   /**
+   * Variable que contiene las funciones de BsModalRef
+  */
+    modalRef: BsModalRef;
+  
   estudiantes: any;
 
   constructor(
     private fb: FormBuilder,
     private serviceColegio: ColegioService,
+    private serviceModal: BsModalService,
+
   ) {
     this.formProfesor = this.fb.group({
       profesor: ""
+    }),
+    this.formAddx = this.fb.group({
+     
+      nombre: "",
     })
   }
 
@@ -36,7 +52,15 @@ export class Estudiantes implements OnInit {
    */
   async ngOnInit() {
     this.estudiantes = await this.serviceColegio.getEstdudiantes().toPromise();
-    console.log("profesores**", this.estudiantes)
+  }
+  
+  /**
+   * Función que permite adicionar nuevos estudiantes
+  */
+    async btnAdd(){
+    let estudiante = this.formAddx.value;
+    estudiante = await this.serviceColegio.addEstudiante(estudiante).toPromise();
+    this.estudiantes = await this.serviceColegio.getEstdudiantes().toPromise();
   }
   
 

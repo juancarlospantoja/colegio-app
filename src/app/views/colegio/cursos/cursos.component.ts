@@ -1,7 +1,9 @@
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ColegioService } from '../../../app_core/services/colegio-service/colegio.service';
+//import { ModelsColegio } from '../../../app_core/services/models/colegio.models';
 
 
 /**
@@ -12,11 +14,14 @@ import { ColegioService } from '../../../app_core/services/colegio-service/coleg
   templateUrl: './cursos.component.html'
 })
 export class Cursos implements OnInit {
-
   /**
    * Variable que contiene el formulario de las casas
    */
   formProfesor: FormGroup
+  /**
+   * Varible que contiene los valores del formulario
+   */
+   formAdd: FormGroup
   /**
    * Variable donde se alamacenan las casas
    */
@@ -37,9 +42,18 @@ export class Cursos implements OnInit {
   constructor(
     private fb: FormBuilder,
     private serviceColegio: ColegioService,
+    //private modelsColegio: ModelsColegio
   ) {
     this.formProfesor = this.fb.group({
       profesor: ""
+    }),
+    this.formAdd = this.fb.group({
+      grado: "",
+      salon: "",
+      colegio: {
+        "id":1,
+        "nombre":"Colegio Olimpo"
+      }
     })
   }
 
@@ -52,15 +66,11 @@ export class Cursos implements OnInit {
   }
 
   /**
-   * Función que carga los pesonajes registrados dependiendo de la casa seleecionada y los ordena
-   */
-  async selectCasa() {
-    try {
-      this.cursos = await this.serviceColegio.getCursosColegio().toPromise();
-    } catch (e) {
-      console.log("error", e);
-      return e;
-    }
-  }  
+   * Función que permite adicionar un nuevo curso
+  */
+   async btnAdd(){
+    let curso = this.formAdd.value;
+    curso = await this.serviceColegio.addCurso(curso).toPromise();
+  }
 
 }

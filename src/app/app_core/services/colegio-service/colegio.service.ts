@@ -79,4 +79,23 @@ export class ColegioService extends ServiceBase {
     return this.http.get(ruta);
   }
 
+  /**
+  * Función que contiene la ruta para acceder a la información de los cursos de cada profesor
+  * @param profesor Variable que contiene el profesor seleccionado
+  * @returns retorna los cursos del porfesor
+  */
+   addCurso(curso): Observable<any> {
+    const ruta = [this.ApiUrl, 'curso'].join('/');
+    return this.http.post(ruta,curso);
+  } 
+  /**
+  * Función que contiene la ruta para acceder a la información de los cursos de cada profesor
+  * @param profesor Variable que contiene el profesor seleccionado
+  * @returns retorna los cursos del porfesor
+  */
+   addEstudiante(estudiante): Observable<any> {
+    const ruta = [this.ApiUrl, 'estudiantes'].join('/');
+    return this.http.post(ruta,estudiante);
+  }   
+
 }
